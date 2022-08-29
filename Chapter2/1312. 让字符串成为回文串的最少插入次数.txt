@@ -1,0 +1,56 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+using namespace std;
+
+
+  
+
+
+class Solution {
+public:
+    int minInsertions(string s) {
+          int N = s.size();
+          int dp[N][N];
+          memset(dp,0,sizeof(dp));//全部初始化数组为0 不加这一句leetcode一些用例不过
+          for(int i=0;i<N;i++){dp[i][i] = 0;}
+          for (int i = N-2; i >= 0; i--)
+          {
+               for (int j = i+1; j <= N-1 ; j++)
+               {
+                    if (s[i]==s[j])
+                    {
+                         dp[i][j] = dp[i+1][j-1];
+                    }
+                    else{
+                         dp[i][j] = min(dp[i][j-1],dp[i+1][j])+1;
+                    }
+                    
+               }
+               
+          }
+          return dp[0][N-1];
+          
+
+          
+    }
+};
+
+int main()
+{
+
+     Solution s;
+     string s1;
+     cin>>s1;
+
+     cout<<s.minInsertions(s1)<<endl;
+         
+}
