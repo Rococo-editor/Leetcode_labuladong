@@ -42,7 +42,7 @@ public:
 
           
     }
-    int minInsertions_Zip_Status(string s) {
+    int minInsertions_Zip_Status(string s) {//状态压缩版本
           int N = s.size();
           int dp[N];
           memset(dp,0,sizeof(dp));//全部初始化数组为0 不加这一句leetcode一些用例不过
