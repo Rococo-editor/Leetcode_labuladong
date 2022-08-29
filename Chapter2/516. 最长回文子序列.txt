@@ -56,6 +56,32 @@ public:
           
 
     }
+    int longestPalindromeSubseq_Zip_Status(string s) {
+          int N = s.size();
+          int dp[N];
+          int dp_i1_j1;
+          for (int i = 0; i < N; i++){dp[i] = 1;}
+          for (int i = N-2; i >= 0; i--)
+          {
+               dp_i1_j1 = 0;
+               for (int j = i+1; j <= N-1; j++)
+               {
+                    int temp = dp[j];
+                    if (s[i]==s[j])
+                    {
+                         dp[j] = dp_i1_j1 + 2;
+                    }
+                    else{
+                         dp[j] = max(dp[j-1],dp[j]);
+                    }
+                    dp_i1_j1 = temp;
+                    
+               }
+               
+          }
+          return dp[N-1];
+
+    }
 };
 
 int main()
