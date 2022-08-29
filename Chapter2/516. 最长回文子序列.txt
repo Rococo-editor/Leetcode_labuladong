@@ -56,7 +56,7 @@ public:
           
 
     }
-    int longestPalindromeSubseq_Zip_Status(string s) {
+    int longestPalindromeSubseq_Zip_Status(string s) {//状态压缩版本
           int N = s.size();
           int dp[N];
           int dp_i1_j1;
