@@ -1,0 +1,55 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+using namespace std;
+
+
+  
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+          //10 9 2 5 3 7 101 18
+          int dp[nums.size()+1];//dp[i]代表nums[i]结尾的最长递增子序列长度
+          for (int i = 0; i < nums.size(); i++){dp[i]=1;}//初始化为1
+          for (int i = 1; i < nums.size(); i++)
+          {
+               for (int j = 0; j < i; j++)
+               {
+                    if(nums[j]<nums[i]){dp[i]=max(dp[i],dp[j]+1);}
+               }
+               
+          }
+          int max = 1;
+          for (int i = 0; i < nums.size(); i++)
+          {
+               if(max<dp[i]){max = dp[i];}
+          }
+          return max;
+          
+    }
+};
+
+int main()
+{
+
+     Solution Sl;
+     //string a,b;
+     vector<int> num;
+     int ch;    
+     do{
+        cin>>ch;
+        num.push_back(ch);
+     }while(getchar()!='\n');
+
+     
+    
+    
+     
+     cout<<Sl.lengthOfLIS(num)<<endl;
+     
+}

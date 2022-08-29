@@ -1,0 +1,10 @@
+vector<int> num;
+     int ch;    
+     do{
+        cin>>ch;
+        num.push_back(ch);
+     }while(getchar()!='\n');
+     for (auto m:num)
+     {
+          cout<<m<<" ";
+     }

@@ -1,0 +1,63 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+
+  
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+          unordered_map<char,int> needs,windows;
+          vector<int> answer;
+          for(int i=0;i<p.size();i++){needs[p[i]]++;windows[p[i]]=0;}
+          int L=0,R=0,valid=0;
+          while(R<s.size()){
+               char temp = s[R];
+               R++;
+               if (needs.count(temp))
+               {
+                    windows[temp]++;
+                    if(windows[temp]==needs[temp]){valid++;}
+               }
+               
+               while (R-L>=p.size())
+               {
+                    char temp_1 = s[L];
+                    L++;
+
+                    if(valid==needs.size()){//找到子串排列
+                         answer.push_back(L-1);
+                    }
+                    if(needs.count(temp_1)){
+                         if(windows[temp_1]==needs[temp_1]){valid--;}
+                         windows[temp_1]--;
+                    }
+               }
+               
+          }
+          return answer;
+
+    }
+
+     
+};
+
+
+int main()
+{
+
+     Solution Sl;
+     string a,b;
+     cin>>a>>b;
+     vector<int> ans;
+     ans = Sl.findAnagrams(a,b);
+     for(int i=0;i<ans.size();i++){
+          cout<<ans.at(i)<<endl;
+     }
+     
+}

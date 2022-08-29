@@ -1,0 +1,70 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <unordered_map>
+using namespace std;
+
+
+  
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+          unordered_map<char,int> need,windows;
+          for(int i=0;i<s1.size();i++){
+               need[s1[i]]++;
+               windows[s1[i]]=0;
+          }
+          int left=0,right=0,valid=0;
+          while (right<s2.size())
+          {
+               char temp = s2[right];
+               right++;
+
+               if(need.count(temp)){//need.count 即需求窗口中有才更新windows 而不是windows.count
+                    windows[temp]++;
+                    if(windows[temp] == need[temp]){
+                         valid++;
+                    }
+               }
+               while(right-left>=s1.size()){
+                    char temp1 = s2[left];
+                    left++;
+
+                    if(valid==need.size()){
+                         return true;
+                    }
+
+                    if(need.count(temp1)){//need.count 即需求窗口中有才更新windows 而不是windows.count
+                         //windows[temp1]-- 若在此位置 则判断条件为windows=1==need  
+                         if(windows[temp1]==need[temp1]){
+                              valid--;
+                         }
+                         windows[temp1]--;//注意位置 windows[temp1]--若在此位置 则判断条件为windows==need  
+                    }
+               }
+
+
+          }
+          return false;
+          
+
+    }
+
+     
+};
+
+
+int main()
+{
+
+     Solution Sl;
+     string a,b;
+     cin>>a>>b;
+     cout<<Sl.checkInclusion(a,b)<<endl;
+
+
+     
+
+}

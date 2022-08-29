@@ -1,0 +1,111 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+using namespace std;
+
+
+  
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+     queue<string> q;
+     unordered_set<string> visSet = {"0000"};
+     int steps = 0;
+     if (target == "0000"){
+          return 0;
+     }
+     if(find(deadends.begin(),deadends.end(),"0000")!=deadends.end()){//01 如果deadend中有0000 则不能成功
+          return -1;
+     }
+     //BFS 模板 
+     q.emplace("0000");
+     while (!q.empty()){
+          int sz = q.size();//02 必不可少的部分 因为队列数量不应该实时更新 应在一轮循环后更新
+          for(int i=0;i<sz;i++){              
+               string sub_q = q.front();
+               if(sub_q==target){
+                    return steps;
+               }
+               
+               q.pop();
+               if(find(deadends.begin(),deadends.end(),sub_q)!=deadends.end()){
+                    continue;
+               }
+
+               for(int j=0;j<4;j++){
+                    string moveKeyUp = MoveUp(sub_q,j);
+                    if(visSet.find(moveKeyUp)!=visSet.end()){//03 如果已经搜索过
+
+                    }
+                    else{//没搜索过加入队列
+                         q.emplace(moveKeyUp);
+                         visSet.insert(moveKeyUp);//04 搜索过的注意加入到无序集合中   
+                    }
+                    string moveKeyDown = MoveDown(sub_q,j);
+                    if(visSet.find(moveKeyDown)!=visSet.end()){//如果已经搜索过
+
+                    }
+                    else{
+                         q.emplace(moveKeyDown);   
+                         visSet.insert(moveKeyDown);
+                    }
+
+               }
+               
+          }
+          steps++;
+          
+
+     }
+     return -1;
+    }
+     string MoveUp(string key,int id){
+          char s = key[id];
+          if(s=='0'){
+               s='9';
+          }
+          else{
+               s=s-1;
+          }
+          key[id]=s;
+          return key;
+     }
+     string MoveDown(string key,int id){
+          char s = key[id];
+          if(s=='9'){
+               s='0';
+          }
+          else{
+               s=s+1;
+          }
+          key[id]=s;
+          return key;
+     }
+     
+
+     
+};
+
+
+int main()
+{
+     queue<int>q;
+     vector<string> v;
+     v.push_back("8887");
+     v.push_back("8889");
+     v.push_back("8878");
+     v.push_back("8898");
+     v.push_back("8788");
+     v.push_back("8988");
+     v.push_back("7888");
+     v.push_back("9888");
+     Solution Sl;
+     string s;
+     cin>>s;
+     cout<<Sl.openLock(v,s);
+
+     
+
+}

@@ -1,0 +1,55 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+
+  
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+          unordered_map<char,int> needs,windows;
+          
+          int L=0,R=0,valid=0;
+          int sublength = 0;
+          while(R<s.size()){
+               char temp = s[R];
+               R++;
+               
+               windows[temp]++;//窗口char ++  不是 int ++  注意检查数据类型
+
+               while (windows[temp]>1)//窗口收缩条件 //窗口char ++  不是 int ++  注意检查数据类型
+               {
+                    char temp1 = s[L];
+                    L++;
+
+                    
+
+                    windows[temp1]--;//窗口char ++  不是 int ++  注意检查数据类型
+               }
+               if(sublength<(R-L)){
+                    sublength=R-L;
+               }
+
+               
+          }
+          return sublength;
+    }
+
+     
+};
+
+
+int main()
+{
+
+     Solution Sl;
+     string a,b;
+     cin>>a;
+     cout<<Sl.lengthOfLongestSubstring(a)<<endl;
+     
+}

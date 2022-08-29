@@ -1,0 +1,83 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <unordered_map>
+using namespace std;
+
+
+  
+class Solution {
+public:
+    string minWindow(string s, string t) {
+          unordered_map<char,int> need,windows;
+          int left = 0;
+          int right = 0;
+          int valid = 0;
+          int sublength = INT_MAX;
+          int start = 0;
+          int end = 0;
+          for(int i=0;i<t.size();i++){need[t[i]]++;windows[t[i]]=0;}
+          while (right<s.size())
+          {
+               char c_temp = s[right];
+               right++;
+               //更新windows窗口
+               if(need.count(c_temp)){
+                    windows[c_temp]++;
+                    if(windows[c_temp]==need[c_temp]){
+                         valid++;
+                    }
+               }
+               while (valid==need.size())
+               {
+                   
+                    char c_temp1 = s[left];
+                    left++;
+
+                    if(windows.count(c_temp1)){
+                         windows[c_temp1]--;
+                         if(windows[c_temp1]+1==need[c_temp1]){
+                              valid--;
+                         }
+                    }
+                     if(right-left+1<=sublength){//注意括号内条件 r-l+1为长度 更新 而不是 r-l和r-l+1之前更新长度
+                         start = left-1;                        
+                         sublength = right-left+1;                  
+                         
+                    }                         
+               }               
+               
+               
+          }
+          if(sublength==INT_MAX){return "";}
+          else{return s.substr(start,sublength);} //substr第二个参数是字串长度         
+    }
+
+     
+};
+
+
+int main()
+{
+
+     Solution Sl;
+     string a,b;
+     cin>>a>>b;
+     cout<<Sl.minWindow(a,b)<<endl;
+
+
+     
+
+}
+//ADOBECODEBANC ABC
+//cabwefgewcwaefgcf cae
+/*
+ if(valid!=need.size()){
+                         if(right-left<=sublength){
+                              start = left-1;
+                              sublength = right-left;
+                         }
+                    }
+                    */
