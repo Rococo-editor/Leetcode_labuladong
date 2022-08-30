@@ -1,0 +1,80 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+using namespace std;
+
+
+  
+
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+          return dp(0,0,s,p);
+    }
+    bool dp(int i,int j,string &s,string &p){
+          int s_size = s.size();
+          int p_size = p.size();
+          if (j==p_size){return i==s_size;}
+          if (i==s_size)
+          {
+               if ((p_size-j)%2==1)
+               {
+                    return false;
+               }
+               for (; j < p.size()-1; j+=2)
+               {
+                    if (p[j+1]!='*')
+                    {
+                         return false;
+                    }
+                    
+               }
+               return true;
+          }
+          if (s[i]==p[j]||p[j]=='.')
+          {
+               if ((j+1)<p_size&&p[j+1]=='*')
+               {
+                    return dp(i,j+2,s,p)||dp(i+1,j,s,p);//默认.*匹配任何字符
+               }
+               else{
+                    return dp(i+1,j+1,s,p);
+               }
+               
+          }
+          else{
+               if ((j+1)<p_size&&p[j+1]=='*')
+               {
+                    return dp(i,j+2,s,p);
+               }
+               else{
+                    return false;
+               }
+          }
+          
+          return false;
+          
+          
+
+    }
+};
+
+int main()
+{
+
+     Solution s;
+     string s1,s2;
+     cin>>s1>>s2;
+
+     cout<<s.isMatch(s1,s2)<<endl;
+         
+}
