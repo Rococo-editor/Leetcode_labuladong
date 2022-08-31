@@ -1,0 +1,63 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+using namespace std;
+
+
+  
+
+
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int N = nums.size();
+        int sums = 0;
+        for(auto s:nums){
+            sums+=s;
+        }
+        if (sums%2!=0)
+        {
+            return false;
+        }
+        sums/=2;
+        
+        bool dp[N+1][sums+1];
+        for (int i = 0; i < N+1; i++){dp[i][0]=true;}
+        for (int i = 0; i < sums+1; i++){dp[0][i]=false;}
+
+        for (int i = 1; i <= N; i++)
+        {
+            for (int j = 1; j <= sums; j++)
+            {
+                if (j>=nums[i-1])
+                {
+                    dp[i][j] = dp[i-1][j] || dp[i-1][j-nums[i-1]];
+                }
+                else{
+                    dp[i][j] = dp[i-1][j];
+                }
+                
+            }
+            
+        }
+        return dp[N][sums];
+
+    }
+};
+
+int main()
+{
+
+     Solution s;
+     string s1,s2;
+     
+     
+}
