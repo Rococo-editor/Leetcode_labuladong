@@ -1,0 +1,60 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+using namespace std;
+
+
+  
+
+
+class Solution {
+public:
+    int maxCoins(vector<int>& nums) {
+        int N = nums.size();
+        int dp[N+2][N+2];
+        memset(dp,0,sizeof(dp));
+        int score[N+2];
+        score[0] = 1;
+        score[N+1] = 1;
+        int UND = 1;
+        for (auto s:nums)
+        {
+            score[UND] = s;
+            UND++;
+        }
+
+        for (int i = N; i >= 0; i--)
+        {
+            for (int j = i+1; j <= N+1; j++)
+            {
+                  for (int k = i+1; k < j; k++)
+                  {
+                        dp[i][j] = max(dp[i][j],dp[i][k]+dp[k][j]+score[i]*score[k]*score[j]);
+                  }
+                  
+            }
+            
+        }
+        return dp[0][N+1];
+        
+        
+
+    } 
+};
+
+int main()
+{
+
+     Solution s;
+     string s1,s2;
+     
+     
+}
