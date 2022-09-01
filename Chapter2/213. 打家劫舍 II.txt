@@ -1,0 +1,56 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+using namespace std;
+
+
+  
+
+
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int N = nums.size();
+        if (N==1)
+        {
+            return nums[0];
+        }
+        
+        return max(rob_DP_ZipStatus(nums,3,N),rob_DP_ZipStatus(nums,2,N-1));
+    }
+
+    int rob_DP_ZipStatus(vector<int>& nums,int start,int end) {
+
+
+        int dp_i_Minus_1;
+        int dp_i_Plus_1=0;
+        int dp_i=nums[end-1];
+        
+        for (int i = end; i >= start; i--)
+        {
+           //dp[i-1] = max(dp[i+1]+nums[i-2],dp[i]);
+           dp_i_Minus_1 = max(dp_i_Plus_1+nums[i-2],dp_i);
+           dp_i_Plus_1 = dp_i;
+           dp_i = dp_i_Minus_1;
+        }
+        return dp_i_Minus_1;
+        
+
+    }
+};
+int main()
+{
+
+     Solution s;
+     string s1,s2;
+     
+     
+}
