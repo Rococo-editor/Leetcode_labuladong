@@ -1,0 +1,143 @@
+class Solution {//回溯解法
+public:
+    int result = 0;
+    int op[2]={-1,1};
+    int findTargetSumWays(vector<int>& nums, int target) {
+        backtrack(nums,0,0,target);
+        return result;
+    }
+    void backtrack(vector<int>& nums,int i,int sum,int target){
+        if (i==nums.size())
+        {
+            if(sum==target){
+                result++;
+            }
+            return ;
+        }
+        for (int j = 0; j <= 1; j++)
+        {
+            sum+=op[j]*nums[i];
+            backtrack(nums,i+1,sum,target);
+            sum-=op[j]*nums[i];
+        }
+        
+
+        
+    }
+};
+
+class Solution {//回溯解法2居然过了？？？？ 没超时？？
+public:
+
+    int op[2]={-1,1};
+    int findTargetSumWays(vector<int>& nums, int target) {
+        return backtrack_memo(nums,0,0,target);
+    }
+    int backtrack_memo(vector<int>& nums,int i,int sum,int target){
+        if (i==nums.size())
+        {
+            if(sum==target){
+                return 1;
+            }
+            return 0;
+        }
+        int result = backtrack_memo(nums,i+1,sum+op[0]*nums[i],target)+backtrack_memo(nums,i+1,sum+op[1]*nums[i],target);
+        return result;
+    }
+};
+
+class Solution { //回溯解法3添加备忘录
+public:
+    unordered_map<string,int> memo;
+
+    int op[2]={-1,1};
+    int findTargetSumWays(vector<int>& nums, int target) {
+        return backtrack_memo(nums,0,0,target);
+        
+    }
+    int backtrack_memo(vector<int>& nums,int i,int sum,int target){
+        if (i==nums.size())
+        {
+            if(sum==target){
+                return 1;
+            }
+            return 0;
+        }
+        string key = to_string(i) + "," + to_string(sum);
+        if (memo.count(key))
+        {
+            return memo[key];
+        }
+        
+        int result = backtrack_memo(nums,i+1,sum+op[0]*nums[i],target)+backtrack_memo(nums,i+1,sum+op[1]*nums[i],target);
+
+        memo.insert(pair<string,int>(key,result));
+        return result;
+    }
+};
+
+class Solution {//动态规划
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int N = nums.size();
+        int sum = 0;
+        for (auto c:nums){sum+=c;}
+        if(sum<target||(sum+target)%2==1||(sum+target)<0){//小心数组下标越界 第三个判断条件
+            return 0;
+        }
+        sum=(sum+target)/2;
+        int dp[N+1][sum+1];
+        memset(dp,0,sizeof(dp));
+        for (int i = 0; i <= N; i++){dp[i][0]=1;}
+        for (int i = 1; i <= N; i++)
+        {
+            for (int j = 0; j <=sum; j++)
+            {
+                if (j>=nums[i-1])
+                {
+                    dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i-1]];
+                }
+                else{
+                    dp[i][j] = dp[i-1][j];
+                }
+                
+            }
+            
+        }
+        return dp[N][sum];
+        
+        
+        
+    }
+};
+
+class Solution {//动态规划状态压缩版
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int N = nums.size();
+        int sum = 0;
+        for (auto c:nums){sum+=c;}
+        if(sum<target||(sum+target)%2==1||(sum+target)<0){
+            return 0;
+        }
+        sum=(sum+target)/2;
+        int dp[sum+1];
+        memset(dp,0,sizeof(dp));
+        dp[0]=1;
+        for (int i = 1; i <= N; i++)
+        {
+            for (int j = sum; j >=0; j--)//逆序遍历防止用二维本层的结果
+            {
+                if (j>=nums[i-1])
+                {
+                    dp[j] = dp[j] + dp[j-nums[i-1]];
+                }                
+            }
+            
+        }
+        return dp[sum];
+        
+        
+        
+    }
+};
