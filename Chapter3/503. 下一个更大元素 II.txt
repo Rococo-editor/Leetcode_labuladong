@@ -1,0 +1,52 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+
+
+
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(nums.size());
+        stack<int> s;
+        for (int i = 2*nums.size()-1; i >=0 ; i--)//双倍数组
+        {
+            while (!s.empty()&&nums[i%n]>=s.top())
+            {
+                s.pop();
+            }
+            if (s.empty())
+            {
+                ans[i%n] = -1;
+            }
+            else{
+                ans[i%n] = s.top();
+            }
+            s.push(nums[i%n]);
+            
+        }
+        return ans;
+    }
+};
+
+int main()
+{
+
+     
+     
+     
+}
