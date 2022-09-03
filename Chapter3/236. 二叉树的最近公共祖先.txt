@@ -1,0 +1,68 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+using namespace std;
+
+
+
+
+
+  struct TreeNode {
+      int val;
+      TreeNode *left;
+      TreeNode *right;
+      TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+  };
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root==nullptr)
+        {
+            return nullptr;
+        }
+        if (root==p||root==q)
+        {
+            return root;
+        }
+
+        TreeNode* L = lowestCommonAncestor(root->left,p,q);
+        TreeNode* R = lowestCommonAncestor(root->right,p,q);
+
+        if (L!=nullptr&&R!=nullptr)
+        {
+            return root;
+        }
+        if (L==nullptr&&R==nullptr)
+        {
+            return nullptr;
+        }
+        if (L==nullptr)
+        {
+            return R;
+        }
+        if (R==nullptr)
+        {
+            return L;
+        }
+        return nullptr;
+        
+    }
+};
+
+int main()
+{
+
+     
+     
+     
+}

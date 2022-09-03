@@ -1,0 +1,120 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+using namespace std;
+
+
+  
+struct LinkedList{
+    struct LinkedList* prev;
+    struct LinkedList* next;
+    int key,value;
+    LinkedList(){//默认参数的析构函数
+        this->key = 0;
+        this->value = 0;
+        prev = nullptr;
+        next = nullptr;
+    }
+    LinkedList(int key,int value){
+        this->key = key;
+        this->value = value;
+        prev = nullptr;
+        next = nullptr;
+    }
+    
+};
+
+class LRUCache {
+private:
+    int size;
+    int capacity;
+    LinkedList *head;//声明指针 但未分配内存
+    LinkedList *tail;
+    unordered_map<int,LinkedList*> Cache;
+public:
+    LRUCache(int capacity) {
+        this->capacity = capacity;
+        this->size = 0;
+        head = new LinkedList();//分配内存空间
+        tail = new LinkedList();
+        head->next = tail;//初始化头部和尾部节点
+        tail->prev = head;
+    }
+    
+    int get(int key) {
+        if (!Cache.count(key))
+        {
+            return -1;
+        }
+        LinkedList* node1 = Cache[key];
+        MoveToHead(node1);
+        return node1->value;
+    }
+    
+    void put(int key, int value) {
+        if (Cache.count(key))
+        {
+            LinkedList* node1 = Cache[key];
+            node1->value = value;
+            MoveToHead(node1);         
+        }
+        else{
+            LinkedList* node1 = new LinkedList(key,value);
+            AddToHead(node1);
+            size++;
+            Cache.insert(pair<int,LinkedList*>(key,node1));
+            if (size>capacity)
+            {
+                LinkedList* dels = DeleteTailNode();
+                Cache.erase(dels->key);
+                delete dels;
+                size--;
+            }
+            
+        }
+        
+
+    }
+
+    void AddToHead(LinkedList* node){
+        //自己的插入版本
+        node->next = head->next;
+        node->next->prev = node;
+        head->next = node;
+        node->prev = head;
+    }
+
+    void DeleteNode(LinkedList* node){
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+        //不释放node节点的原因？ Delete后的node可能在MoveToHead中需要用到
+    }
+
+    void MoveToHead(LinkedList* node){
+        DeleteNode(node);
+        AddToHead(node);
+    }
+
+
+    LinkedList* DeleteTailNode(){
+        LinkedList* del = tail->prev;
+        DeleteNode(del);
+        return del;
+    }
+};
+
+int main()
+{
+
+     
+     
+     
+}

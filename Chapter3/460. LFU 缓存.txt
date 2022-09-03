@@ -1,0 +1,93 @@
+import java.security.Key;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
+class LFUCache {
+    HashMap<Integer,Integer> KeyToVal;
+    HashMap<Integer,Integer> KeyToFreq;
+    HashMap<Integer, LinkedHashSet<Integer>> FreqToKeys;
+    int minFreq;
+    int capacity;
+
+    public LFUCache(int capacity) {
+        KeyToVal = new HashMap<>();
+        KeyToFreq = new HashMap<>();
+        FreqToKeys = new HashMap<>();
+        this.minFreq = 0;
+        this.capacity = capacity;
+    }
+
+    public int get(int key) {
+        if (!KeyToVal.containsKey(key)){
+            return -1;
+        }
+        FreqIncreaseOfTwoTables(key);//key对应的frequency加一 且进行二个表的维护
+        return KeyToVal.get(key);
+    }
+
+    public void put(int key, int value) {
+        if (this.capacity<=0) return;
+
+        if (KeyToVal.containsKey(key)){//如果存在key 修改key对应的键值且freq+1
+            KeyToVal.put(key,value);
+            FreqIncreaseOfTwoTables(key);//key对应的frequency加一 且进行二个表的维护
+
+        }
+        else{//如果不存在则插入
+            if (this.capacity<=KeyToVal.size()){//如果满了 需要删除后再插入
+                DeleteMinFreqOrTime();
+                //插入 因为插入代码相同所以后面没有else
+            }
+            //没满直接插入
+            KeyToVal.put(key,value);
+            KeyToFreq.put(key,1);
+            FreqToKeys.putIfAbsent(1,new LinkedHashSet<>());//如果Freq对应的Link不存在 则建立一个新表准备插入
+            FreqToKeys.get(1).add(key);//插入 freq+1,key 键值对
+            this.minFreq = 1;
+        }
+    }
+
+    public void FreqIncreaseOfTwoTables(int key){
+        int freq = KeyToFreq.get(key);
+        //表1
+        KeyToFreq.put(key,freq+1);
+        //表2
+        FreqToKeys.get(freq).remove(key);//删除原freq对应的key
+
+        FreqToKeys.putIfAbsent(freq+1,new LinkedHashSet<>());//如果Freq对应的Link不存在 则建立一个新表准备插入
+        FreqToKeys.get(freq+1).add(key);//插入 freq+1,key 键值对
+        //
+        if (FreqToKeys.get(freq).isEmpty()){//若freq对应的列表空了 移除该表
+            FreqToKeys.remove(freq);
+            if (freq == this.minFreq){//若当前移除的freq是最小的freq 则min_freq增加
+                this.minFreq++;
+            }
+        }
+
+
+    }
+
+    public void DeleteMinFreqOrTime(){
+        LinkedHashSet<Integer> ListOfKey = FreqToKeys.get(this.minFreq);
+        int delkey = ListOfKey.iterator().next();
+        ListOfKey.remove(delkey);//删除
+
+        if (ListOfKey.isEmpty()){
+            FreqToKeys.remove(this.minFreq);
+            //未更新minFreq因为该函数仅在put中用到 且put函数最后会将minFreq修改为1
+        }
+
+        KeyToVal.remove(delkey);
+        KeyToFreq.remove(delkey);
+
+
+
+    }
+}
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */

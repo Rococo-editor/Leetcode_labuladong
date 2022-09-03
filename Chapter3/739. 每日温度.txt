@@ -1,0 +1,54 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        vector<int> ans(temperatures.size());
+        stack<int> s_index;
+        int top_index = temperatures.size()-1;
+        for (int i = temperatures.size()-1; i >=0 ; i--)
+        {
+            while (!s_index.empty()&&temperatures[i]>=temperatures[s_index.top()])
+            {
+                s_index.pop();
+                
+            }
+            if (s_index.empty())
+            {
+                ans[i] = 0;
+            }
+            else{
+                ans[i] = s_index.top()-i;
+            }
+            s_index.push(i);
+            
+            
+        }
+        return ans;
+    }
+};
+
+
+
+
+int main()
+{
+
+     
+     
+     
+}
