@@ -1,0 +1,81 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+
+
+
+
+ struct ListNode {
+      int val;
+      ListNode *next;
+      ListNode() : val(0), next(nullptr) {}
+      ListNode(int x) : val(x), next(nullptr) {}
+      ListNode(int x, ListNode *next) : val(x), next(next) {}
+  };
+ 
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        ListNode* slow=head;
+        ListNode* fast=head;
+
+
+        while (fast!=nullptr&&fast->next!=nullptr)//这里面判断条件均是fast 和 fast->next !=nullptr
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        if (fast!=nullptr)//若为奇数则慢指针需要再移动一次
+        {
+            slow = slow->next;
+        }
+        ListNode* left_node = head;
+        ListNode* reverses_node = reverse(slow);
+        while (reverses_node!=nullptr)
+        {
+            if (left_node->val!=reverses_node->val)
+            {
+                return false;
+            }
+            left_node = left_node->next;
+            reverses_node = reverses_node->next;
+            
+        }
+        return true;
+    }
+
+    ListNode* reverse(ListNode* head){
+        ListNode* pre = nullptr;
+        ListNode* cur = head;
+        while (cur!=nullptr)
+        {
+            ListNode* node = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = node;
+        }
+        return pre;
+        
+    }
+};
+
+int main()
+{
+
+     
+     
+     
+}
