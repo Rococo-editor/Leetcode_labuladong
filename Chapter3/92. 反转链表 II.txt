@@ -6,7 +6,7 @@ public:
         {
             return reverseZeroToN(head,right);
         }
-        head->next = reverseBetween(head->next,left-1,right-1);
+        head->next = reverseBetween(head->next,left-1,right-1);//这里的head->next相当于断开head和head->next之间的链条 将head指针的下一节点指向结果节点 
         return head;
 
 
