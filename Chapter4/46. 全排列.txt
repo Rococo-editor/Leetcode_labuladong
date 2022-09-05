@@ -1,0 +1,101 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+
+
+class Solution {//原版
+public:
+    vector<vector<int>> ans;
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<int> track;
+        backtrack(track,nums);
+        return ans;
+
+    }
+    void backtrack(vector<int>& track,vector<int>& nums){
+        if (track.size()==nums.size())
+        {
+            ans.push_back(track);
+            return;
+        }
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (find_vecs(track,nums[i]))
+            {
+               continue;
+            }
+            
+            track.push_back(nums[i]);
+            backtrack(track,nums);
+            track.pop_back();
+        } 
+    }
+    bool find_vecs(vector<int> a, int temp){
+        vector<int>::iterator it = find(a.begin(),a.end(),temp);
+        if (it!=a.end())
+        {
+            return true;
+        }
+        return false;
+        
+    }
+};
+
+class Solution {//将track.size()替换成n也可以
+public:
+    vector<vector<int>> ans;
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<int> track;
+        backtrack(0,track,nums);
+        return ans;
+
+    }
+    void backtrack(int n,vector<int>& track,vector<int>& nums){
+        if (n==nums.size())
+        {
+            ans.push_back(track);
+            return;
+        }
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (find_vecs(track,nums[i]))
+            {
+               continue;
+            }
+            
+            track.push_back(nums[i]);
+            backtrack(n+1,track,nums);
+            track.pop_back();
+        } 
+    }
+    bool find_vecs(vector<int> a, int temp){
+        vector<int>::iterator it = find(a.begin(),a.end(),temp);
+        if (it!=a.end())
+        {
+            return true;
+        }
+        return false;
+        
+    }
+};
+
+int main()
+{
+
+     
+     
+     
+}
