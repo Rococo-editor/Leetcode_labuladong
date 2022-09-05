@@ -1,0 +1,97 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+
+
+
+
+
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+
+
+
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if (head==nullptr)
+        {
+            return head;
+        }
+        ListNode* L = head;
+        ListNode* R = head;
+        for (int i = 0; i < k; i++)
+        {
+            if (R==nullptr)
+            {
+                return head;//整个数量 小于K不需要反转
+            }
+            
+            R = R->next;
+        }
+        ListNode* Rev = reverseLinkHeadToTail(L,R);
+
+        L->next = reverseKGroup(R,k);//将L与整体反转后的结果链接
+
+        return Rev;
+        
+    }
+    ListNode* reverseLinkAll(ListNode* head){//反转整个列表
+        ListNode* cur = head;
+        ListNode* nxt = head;
+        ListNode* pre = nullptr;
+        while (cur!=nullptr)
+        {
+            nxt = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = nxt;
+        }
+        return pre;
+        
+
+    }
+    ListNode* reverseLinkHeadToTail(ListNode* head,ListNode* tail){//左闭右开区间 注意[a,b)
+
+        ListNode* cur = head;
+        ListNode* nxt = head;
+        ListNode* pre = nullptr;
+        while (cur!=tail)//到标定的尾部时中止反转
+        {
+            nxt = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = nxt;
+        }
+        return pre;
+
+    }
+};
+
+int main()
+{
+
+     
+     
+     
+}
