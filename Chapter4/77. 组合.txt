@@ -1,0 +1,49 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<vector<int>> combine(int n, int k) {
+        vector<int> track;
+        backtrack(n,k,1,track);
+        return ans;
+
+    }
+    void backtrack(int n,int k,int start,vector<int>&track){
+        if (k==track.size())
+        {
+            ans.push_back(track);
+            return;
+        }
+        for (int i = start; i <= n; i++)
+        {
+            track.push_back(i);
+            backtrack(n,k,i+1,track);
+            track.pop_back();
+        }
+        
+        
+    }
+};
+
+int main()
+{
+
+     
+     
+     
+}
