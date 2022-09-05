@@ -1,0 +1,28 @@
+class Solution {
+public:
+    ListNode* back = nullptr;
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        if (left==1)
+        {
+            return reverseZeroToN(head,right);
+        }
+        head->next = reverseBetween(head->next,left-1,right-1);
+        return head;
+
+
+        
+    }
+    ListNode* reverseZeroToN(ListNode* head, int n){
+        if (n==1)
+        {
+            back = head->next;
+            return head;
+        }
+        ListNode* last = reverseZeroToN(head->next,n-1);
+
+        head->next->next = head;
+        head->next = back;
+
+        return last;   
+    }
+};
