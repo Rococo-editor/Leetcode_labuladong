@@ -1,0 +1,51 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+class Solution {//hash_map O(n)解法
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int,int> hash_maps;
+        vector<int> ans;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            hash_maps[nums[i]] = i;
+        }
+        for (int i = 0; i < nums.size(); i++)
+        {
+            int sec = target - nums[i];//第二操作数
+            //如果第二操作数在哈希表中 且不是本身
+            if (hash_maps.count(sec)&&i!=hash_maps[sec])//因为数不重复出现 因此不考虑重复问题
+            {
+                ans.push_back(i);
+                ans.push_back(hash_maps[sec]);
+                return ans;
+            }
+            
+
+        }
+        ans.push_back(-1);
+        ans.push_back(-1);
+        return ans;
+        
+        
+
+    }
+};
+int main()
+{
+       
+
+}

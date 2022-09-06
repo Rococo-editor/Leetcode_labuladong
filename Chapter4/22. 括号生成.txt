@@ -1,0 +1,58 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+
+class Solution {
+public:
+    char s[2] = {'(',')'};
+    int left[2] = {-1,0};
+    int right[2] = {0,-1};
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        string track;
+        backtrack(n,n,track,res);
+        return res;
+
+    }
+    void backtrack(int l,int r,string& track,vector<string>& res){//剩余左括号数目 剩余右括号数目
+        if (!(l>=0&&r>=0))
+        {
+            return;
+        }
+        if (l>r)//左括号的数量始终大于右括号的数量 即剩余左括号的数量应该小于剩余右括号的数量 若剩余左括号的数量大于剩余右括号的数量 则不合法
+        {
+            return;
+        }
+        if (l==0&&r==0)
+        {
+            res.push_back(track);
+            return;
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            track.push_back(s[i]);
+            backtrack(l+left[i],r+right[i],track,res);
+            track.pop_back();
+        }
+         
+    }
+};
+int main()
+{
+       
+
+}

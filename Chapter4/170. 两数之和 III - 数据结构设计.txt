@@ -1,0 +1,54 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+class TwoSum{
+public:
+    unordered_map<int,int> freq;
+    void add(int number){
+        freq[number]++;
+    }
+    bool find(int value){
+
+        for (auto f:freq)
+        {
+            int sec = value - f.first;
+
+            if (sec!=f.first&&freq.count(sec))
+            {
+                return true;
+            }
+            if (sec==f.first&&f.second>1)//考虑数的重复出现情况
+            {
+                return true;
+            }
+            
+        }
+        return false;
+        
+    }
+};
+
+int main()
+{
+       TwoSum t;
+       t.add(3);
+       t.add(3);
+       t.add(2);
+       t.add(5);
+       cout<<t.find(6)<<endl;
+       cout<<t.find(7)<<endl;
+
+}

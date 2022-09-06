@@ -1,0 +1,48 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+class Solution {//双指针
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int L = 0;
+        int R = numbers.size()-1;
+
+        while (L<R)
+        {
+            int sum = numbers[L]+numbers[R];
+            if (sum==target)
+            {
+                return {L+1,R+1};//原数组规定下标从1开始 存储由0开始
+            }
+            else if (sum>target)
+            {
+                R--;
+            }
+            else if (sum<target)
+            {
+                L++;
+            } 
+        }
+        return {-1,-1};
+        
+
+    }
+};
+int main()
+{
+
+
+}
