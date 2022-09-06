@@ -1,0 +1,97 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+
+class Solution{
+public:
+    int calculate(string s){
+        stack<int> stc;
+        int num = 0;//数字前的符号
+        char sign = '+';
+
+        for (int i = 0; i < s.size(); i++)
+        {
+            char c = s[i];
+        
+            if (isdigit(c))//如果是数字 继续读
+            {
+                num = num*10 + (c-'0');//加括号防止num溢出
+            }
+                            //c!=' ' 消除空格的影响
+            if ((!isdigit(c)&&c!=' ')||i==s.size()-1)
+            {
+                int pre;
+                if (sign=='+')
+                {
+                    stc.push(num);
+                }
+                else if (sign=='-')
+                {
+                    stc.push(-num);
+                }
+                else if (sign=='*')
+                {
+                    pre = stc.top();
+                    stc.pop();
+                    stc.push(pre*num);
+                }
+                else if (sign=='/')
+                {
+                    pre = stc.top();
+                    stc.pop();
+                    stc.push(pre/num);
+                }
+                 
+                sign = c;
+                num = 0;
+
+            }
+            
+            
+        }
+        int res = 0;
+        while (!stc.empty())
+        {
+            res+=stc.top();
+            stc.pop();
+        }
+        return res;
+        
+        
+    }
+
+};
+
+//4Sum 测试用例
+//vector<int> nums = {1000000000,1000000000,1000000000,1000000000};
+//int target = -294967296;
+//output: []
+
+
+//输入：nums = [1,0,-1,0,-2,2], target = 0
+//输出：[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+
+//输入：nums = [2,2,2,2,2], target = 8
+//输出：[[2,2,2,2]]
+int main()
+{
+    Solution s;
+    string s1 = "1-12+3";
+    cout<<s.calculate(s1)<<endl;
+    
+    
+
+}
