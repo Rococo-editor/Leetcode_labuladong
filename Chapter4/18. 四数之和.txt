@@ -1,0 +1,165 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+class Solution {//原始由2-3-4数解法
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> ans;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            long long target_sum = (long long)(target-nums[i]);
+            vector<vector<int>> three_nums = threeSum(nums,i+1,target_sum);
+
+            for(auto tn:three_nums){
+                tn.push_back(nums[i]);
+                ans.push_back(tn);
+            }
+
+            while (i<nums.size()-1&&nums[i]==nums[i+1])
+            {
+                i++;
+            }
+            
+
+
+        }
+        return ans;
+        
+
+    }
+
+    vector<vector<int>> threeSum(vector<int>& nums,int start,long long target) {
+        sort(nums.begin(),nums.end());//注意排序
+        vector<vector<int>> ans;
+        for (int i = start; i < nums.size(); i++)
+        {
+            long long targets_twosum = (long long)(target-nums[i]);
+            vector<vector<int>> temp = twoSum(nums,i+1,targets_twosum);
+            for(auto tp:temp){
+                tp.push_back(nums[i]);
+                ans.push_back(tp);
+            }
+            while (i<(nums.size()-1)&&nums[i]==nums[i+1])
+            {
+                i++;
+            }
+            
+
+        }
+        
+        return ans;
+    }
+
+    vector<vector<int>> twoSum(vector<int>& numbers, int start,long long target) {
+        int L = start;
+        int R = numbers.size()-1;
+        sort(numbers.begin(),numbers.end());//注意排序
+        vector<vector<int>> res;
+        while (L<R)
+        {
+            long long sum = (long long)(numbers[L]+numbers[R]);
+            int left_num = numbers[L];
+            int right_num = numbers[R];
+            if (sum==target)
+            {
+                res.push_back({numbers[L],numbers[R]});
+                while (numbers[L]==left_num&&L<R){L++;}
+                while (numbers[R]==right_num&&L<R){R--;}
+            }
+            else if (sum>target)
+            {
+                while (numbers[R]==right_num&&L<R){R--;}
+            }
+            else if (sum<target)
+            {
+                while (numbers[L]==left_num&&L<R){L++;}
+            } 
+        }
+        return res;
+    }
+};
+
+
+class Solution {//nSum解法
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(),nums.end());//排序
+        vector<vector<int>> anss = nSumProblem(nums,4,0,target);
+        return anss;
+    }
+    //在调用nSum之前必须要用sort(nums.begin(),nums.end())对nums进行排序 之所以函数内没写sort是因为递归效率比较低
+    vector<vector<int>> nSumProblem(vector<int>& nums,int n,int start,long long target){
+        vector<vector<int>> res;
+        int sz = nums.size();
+        if (n<2||nums.size()<n)
+        {
+            return res;
+        }
+        if (n==2)
+        {
+            int L = start;
+            int R = nums.size()-1;
+            while (L<R)
+            {
+                long long sum =(long long)(nums[L]+nums[R]);
+                int left_num = nums[L];
+                int right_num = nums[R];
+                if (sum==target)
+                {
+                    res.push_back({nums[L],nums[R]});
+                    while (nums[L]==left_num&&L<R){L++;}
+                    while (nums[R]==right_num&&L<R){R--;}
+                }
+                else if (sum>target)
+                {
+                    while (nums[R]==right_num&&L<R){R--;}
+                }
+                else if (sum<target)
+                {
+                    while (nums[L]==left_num&&L<R){L++;}
+                } 
+            }
+        }
+        else{
+            for (int i = start; i < sz; i++)
+            {
+                vector<vector<int>> NSum = nSumProblem(nums,n-1,i+1,(long long)(target-nums[i]));
+                for(auto nsm:NSum){
+                    nsm.push_back(nums[i]);
+                    res.push_back(nsm);
+                }
+                while (i<sz-1&&nums[i]==nums[i+1])
+                {
+                    i++;
+                }
+                
+            }
+            
+        }
+        return res;
+    }
+};
+
+
+int main()
+{
+    long long a = 1000000000;
+    long long b = - 1000000000;
+    cout<<a+a+a+a<<endl;
+    
+
+}
