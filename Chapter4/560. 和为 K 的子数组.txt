@@ -1,0 +1,49 @@
+class Solution {//节省内存的解法
+public:
+    unordered_map<int,int> HashMaps;
+    int subarraySum(vector<int>& nums, int k) {
+        int ans = 0;
+        HashMaps[0] = 1;
+        int PreSums;
+        PreSums=0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            PreSums = nums[i]+PreSums;
+            int JSum = PreSums-k;
+            if (HashMaps.count(JSum))
+            {
+                ans+=HashMaps[JSum];
+            }
+            HashMaps[PreSums]++;
+            
+
+        }
+        return ans;
+        
+    }
+};
+
+class Solution {//不节省内存的解法 多了个vector<int>数组
+public:
+    unordered_map<int,int> HashMaps;
+    int subarraySum(vector<int>& nums, int k) {
+        int ans = 0;
+        HashMaps[0] = 1;
+        vector<int> PreSums;
+        PreSums.push_back(0);
+        for (int i = 0; i < nums.size(); i++)
+        {
+            PreSums.push_back(nums[i]+PreSums[i]);
+            int JSum = PreSums[i+1]-k;
+            if (HashMaps.count(JSum))
+            {
+                ans+=HashMaps[JSum];
+            }
+            HashMaps[PreSums[i+1]]++;
+            
+
+        }
+        return ans;
+        
+    }
+};

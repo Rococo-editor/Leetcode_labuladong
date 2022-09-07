@@ -1,0 +1,86 @@
+
+
+class NestedIterator {//原方法 将所有节点扩展存储到vector中（要一个结果 要算所有的节点）
+public:
+    vector<int> ans;
+    vector<int>::iterator cur;
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for(auto ns:nestedList){
+            traverse(ns);
+        }
+        cur = ans.begin();
+        
+    }
+
+    void traverse(NestedInteger root){
+        if(root.isInteger()){
+            ans.push_back(root.getInteger());
+            return;
+        }
+        for(auto ns:root.getList()){
+            traverse(ns);
+        }
+    }
+    
+    int next() {
+        return *cur++;
+    }
+    
+    bool hasNext() {
+        return cur!=ans.end();
+    }
+};
+
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * class NestedInteger {
+ *   public:
+ *     // Return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     bool isInteger() const;
+ *
+ *     // Return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // The result is undefined if this NestedInteger holds a nested list
+ *     int getInteger() const;
+ *
+ *     // Return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // The result is undefined if this NestedInteger holds a single integer
+ *     const vector<NestedInteger> &getList() const;
+ * };
+ */
+
+class NestedIterator {//栈优化的方法 只展开到遇到第一个数字时 进行输出 （要一个结果 即算出对应的结果）
+public:
+    stack<NestedInteger> s;
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for(int i = nestedList.size()-1;i>=0;i--){
+            s.push(nestedList[i]);
+        }
+    }
+    
+    int next() {
+        NestedInteger nt = s.top();
+        s.pop();
+        return nt.getInteger();
+    }
+    
+    bool hasNext() {
+        while(!s.empty()){
+            NestedInteger nt = s.top();
+            if(nt.isInteger()){return true;}//若为数字 则不弹出 在next()方法中弹出
+            s.pop();//若不是数字 弹出
+            for(int i=nt.getList().size()-1;i>=0;i--){
+                s.push(nt.getList()[i]);
+            }
+
+        }
+        return false;
+    }
+};
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i(nestedList);
+ * while (i.hasNext()) cout << i.next();
+ */
+

@@ -1,0 +1,62 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> ans;
+    vector<int> pancakeSort(vector<int>& arr) {
+        CakeSort(arr,arr.size());
+        return ans;
+
+    }
+    void CakeSort(vector<int>& arr,int n){
+        if (n==1)
+        {
+            return ;
+        }
+        int MaxCakeIndex = 0;
+        int MaxCakeValue = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (MaxCakeValue<arr[i])
+            {
+                MaxCakeValue = arr[i];
+                MaxCakeIndex = i;
+            }
+            
+        }
+        Reverse_Cake(arr,0,MaxCakeIndex);
+        ans.push_back(MaxCakeIndex+1);
+        Reverse_Cake(arr,0,n-1);
+        ans.push_back(n);
+
+        CakeSort(arr,n-1);
+    }
+    void Reverse_Cake(vector<int>& arr,int i,int j){
+        while (i<j)
+        {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            i++;j--;
+        }
+        
+    }
+};
+
+int main()
+{
+    
+}
