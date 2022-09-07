@@ -1,0 +1,74 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+class Solution
+{
+public:
+    int minEatingSpeed(vector<int> &piles, int h)
+    {
+        int MaxPile = SearchMaxPile(piles);
+        int left = 1;
+        int right = MaxPile;
+        while (left < right)
+        {
+            int mid_Speed = left + (right - left) / 2;//(2l+r-l)/2 不是 (2r+l-r)/2 因为r>l 所以用r-l防止溢出
+            if (FinishEats(piles, h, mid_Speed))
+            {
+                right = mid_Speed;
+            }
+            else
+            {
+                left = mid_Speed + 1;
+            }
+        }
+        return left;
+    }
+    int SearchMaxPile(vector<int> &piles)
+    {
+        int MaxPile = 0;
+        for (int i = 0; i < piles.size(); i++)
+        {
+            if (MaxPile < piles[i])
+            {
+                MaxPile = piles[i];
+            }
+        }
+        return MaxPile;
+    }
+    bool FinishEats(vector<int> &piles, int h, int speed)
+    {
+        int sum = 0;
+        for (auto p : piles)
+        {
+            int time_left;
+            if (p % speed == 0)
+            {
+                time_left = 0;
+            }
+            else
+            {
+                time_left = 1;
+            }
+
+            int time_p = p / speed + time_left;
+            sum += time_p;
+        }
+        return sum <= h;
+    }
+};
+
+int main()
+{
+}

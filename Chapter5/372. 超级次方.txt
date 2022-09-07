@@ -1,0 +1,86 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+class Solution {//基础求法
+public:
+    
+    int superPow(int a, vector<int>& b) {
+        if (b.empty())
+        {
+            return 1;
+        }
+        int lastnum = b.back();
+        b.pop_back();
+
+        int Part1 = mypow(a,lastnum);
+        int Part2 = mypow(superPow(a,b),10);
+        return (Part1%1337)*(Part2%1337)%1337;//注意公式 (a*b)%k = (a%k)*(b%k)%k
+
+        
+    }
+    int mypow(int a, int b){
+        int ans = 1;
+        a%=1337;//这里也要求余数 由上面公式可知 对每个乘法的因子 都要进行求余操作
+        for (int i = 0; i < b; i++)
+        {
+            ans*=a;
+            ans%=1337;
+        }
+        return ans;
+        
+    }
+};
+
+
+class Solution {//高速求幂优化 即mypow改为递归求幂 复杂度变为log级别 
+public:
+    
+    int superPow(int a, vector<int>& b) {
+        if (b.empty())
+        {
+            return 1;
+        }
+        int lastnum = b.back();
+        b.pop_back();
+
+        int Part1 = mypow(a,lastnum);
+        int Part2 = mypow(superPow(a,b),10);
+        return (Part1%1337)*(Part2%1337)%1337;//注意公式 (a*b)%k = (a%k)*(b%k)%k
+
+        
+    }
+    int mypow(int a, int b){
+        if (b==0)
+        {
+            return 1;
+        }
+        a%=1337;
+        if (b%2==1)
+        {
+            return ((a%1337)*(mypow(a,b-1)%1337))%1337;
+        }
+        if (b%2==0)
+        {
+            int mul = mypow(a,b/2)%1337;
+            return mul*mul%1337;
+        }
+        return 0;   
+    }
+};
+
+int main()
+{
+    
+}

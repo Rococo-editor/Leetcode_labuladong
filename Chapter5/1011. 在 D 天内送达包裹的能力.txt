@@ -1,0 +1,63 @@
+class Solution
+{
+public:
+    int shipWithinDays(vector<int> &weights, int days)
+    {
+        int left = MaxWeights(weights);
+        int right = SumWeights(weights);
+        while (left < right)
+        {
+            int mid_w_speed = left + (right - left) / 2;
+            if (CanDeliverWeights(weights, days, mid_w_speed))
+            {
+                right = mid_w_speed;
+            }
+            else
+            {
+                left = mid_w_speed + 1;
+            }
+        }
+        return left;
+    }
+    int MaxWeights(vector<int> &weights)
+    {
+        int maxw = 0;
+        for (auto w : weights)
+        {
+            if (maxw < w)
+            {
+                maxw = w;
+            }
+        }
+        return maxw;
+    }
+    int SumWeights(vector<int> &weights)
+    {
+        int sumw = 0;
+        for (auto w : weights)
+        {
+            sumw += w;
+        }
+        return sumw;
+    }
+    bool CanDeliverWeights(vector<int> &weights, int days, int speed)
+    {
+        int sp = speed;
+        int day = 1;
+        for(int i=0;i<weights.size();i++){
+            
+            if (sp-weights[i]<0)
+            {
+                sp = speed;
+                day+=1;
+                i-=1; 
+            }
+            else if(sp-weights[i]>=0){
+                sp-=weights[i];
+            }
+            
+        }
+        //cout<<day<<" "<<speed<<endl;
+        return day<=days;
+    }
+};
