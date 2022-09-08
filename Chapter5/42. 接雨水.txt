@@ -1,0 +1,104 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+class Solution
+{
+public:
+    int trap(vector<int> &height)
+    { //备忘录
+        int ans = 0;
+        int n = height.size();
+        // ans[i] = min(max(height[0...i-1]),max(height[i+1...n-1]))-height[i];
+        vector<int> max_height_0_to_iM1(n, 0);
+        max_height_0_to_iM1[0] = height[0];
+        vector<int> max_height_iP1_to_NM1(n, 0);
+        max_height_iP1_to_NM1[n - 1] = height[n - 1];
+        for (int i = 1; i < n; i++)
+        {
+            if (max_height_0_to_iM1[i - 1] < height[i])
+            {
+                max_height_0_to_iM1[i] = height[i];
+            }
+            else
+            {
+                max_height_0_to_iM1[i] = max_height_0_to_iM1[i - 1];
+            }
+        }
+        for (int i = n - 2; i >= 0; i--)
+        {
+            if (max_height_iP1_to_NM1[i + 1] < height[i])
+            {
+                max_height_iP1_to_NM1[i] = height[i];
+            }
+            else
+            {
+                max_height_iP1_to_NM1[i] = max_height_iP1_to_NM1[i + 1];
+            }
+        }
+
+        // for (auto c : max_height_0_to_iM1){cout << c << " ";}cout<<endl;
+        // for (auto c : max_height_iP1_to_NM1){cout << c << " ";}cout << endl;
+
+        for (int i = 0; i < n; i++)
+        {
+            ans += min(max_height_0_to_iM1[i], max_height_iP1_to_NM1[i]) - height[i];
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    int trap(vector<int> &height)
+    { //双指针
+        int ans = 0;
+        int n = height.size();
+        // ans[i] = min(max(height[0...i-1]),max(height[i+1...n-1]))-height[i];
+        int left = 0;
+        int right = n-1;
+        int l_Max = height[left];
+        int R_Max = height[right];
+
+        while (left<=right)
+        {
+            if(l_Max<height[left]){
+                l_Max = height[left];
+            }
+            if(R_Max<height[right]){
+                R_Max = height[right];
+            }
+            if(l_Max<R_Max){
+                ans+=l_Max-height[left];
+                left++;
+            }
+            else{
+                ans+=R_Max-height[right];
+                right--;
+            }
+            
+        }
+        return ans;
+        
+    }
+};
+
+
+int main()
+{
+    vector<int> h = {4, 2, 0, 3, 2, 5};
+    Solution s;
+    cout << s.trap(h);
+}

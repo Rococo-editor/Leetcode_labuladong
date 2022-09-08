@@ -1,0 +1,41 @@
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+
+
+
+
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int l_pointer = 0;
+        int r_pointer = 1;
+        while (r_pointer<nums.size())
+        {
+            if(nums[l_pointer]!=nums[r_pointer]){
+                l_pointer++;
+                nums[l_pointer] = nums[r_pointer];
+            }
+            r_pointer++;//无论相等不相等 指针总往右走
+        }
+        return l_pointer+1;
+    }
+};
+int main()
+{
+    vector<int> h = {0,0,1,1,1,2,2,3,3,4};
+    Solution s;
+    cout << s.removeDuplicates(h);
+}
