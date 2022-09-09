@@ -1,0 +1,95 @@
+class ExamRoom {
+    Map<Integer,int[]> startMap;//p为起点的线段
+    Map<Integer,int[]> endMap;//p为终点的线段
+    TreeSet<int[]> pq;//pq中的每一个元素存储线段的左右端点
+    int N;
+
+    public ExamRoom(int n) {
+        this.N = n;
+        startMap = new HashMap<>();
+        endMap = new HashMap<>();
+        pq = new TreeSet<>((a,b)->{//线段长度始终保持升序
+            int distA = distance(a);
+            int distB = distance(b);
+            if (distA==distB){
+                return b[0]-a[0];//选择索引小的（从大到小）
+            }
+            return distA-distB;//return distA - distB 等价于return distA<distB（从小到大）
+        });
+        addInterval(new int[] {-1,N});
+
+    }
+
+    public int seat() {
+        int[] max_interval = pq.last();
+        int x = max_interval[0];
+        int y = max_interval[1];
+        int seats;
+
+        if (x==-1){
+            seats = 0;
+        }
+        else if (y==N){
+            seats = N-1;
+        }
+        else{
+            seats = x + (y-x)/2;//(x+y)/2防止溢出
+        }
+        int[] leftinterval = new int[]{x,seats};
+        int[] rightinterval = new int[]{seats,y};
+        removeInterval(max_interval);//注意顺序
+        addInterval(leftinterval);
+        addInterval(rightinterval);
+        
+        return seats;
+    }
+
+    public void leave(int p) {
+        int[] right = startMap.get(p);
+        int[] left = endMap.get(p);
+        int[] merges = new int[] {left[0],right[1]};
+        
+        removeInterval(left);
+        removeInterval(right);
+        addInterval(merges);//注意顺序
+
+    }
+
+    private void addInterval(int [] intv){
+        startMap.put(intv[0],intv);
+        endMap.put(intv[1],intv);
+        pq.add(intv);
+    }
+
+    private void removeInterval(int [] intv){
+        startMap.remove(intv[0]);
+        endMap.remove(intv[1]);
+        pq.remove(intv);
+    }
+
+    private int distance(int[] dis){//返回线段中点 到 线段端点的长度
+        int x = dis[0];
+        int y = dis[1];
+        if (x==-1){
+            return y;
+        }
+        if (y==N){
+            return N-1-x;
+        }
+        return (y-x)/2;
+    }
+
+    public static void main(String[] args) {
+        ExamRoom e = new ExamRoom(10);
+        e.seat();
+        e.seat();
+        e.seat();
+        e.seat();
+        e.leave(4);
+        e.seat();
+
+    }
+
+
+
+}

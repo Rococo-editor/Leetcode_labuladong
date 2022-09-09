@@ -1,0 +1,187 @@
+class Solution {//裸DFS解法
+public:
+    int m,n;
+    void solve(vector<vector<char>>& board) {
+        m = board.size();
+        n = board[0].size();
+        for (int i = 0; i < n; i++)
+        {
+            dfsBoard(board,0,i);
+            dfsBoard(board,m-1,i);
+        }
+        for (int i = 0; i < m; i++)
+        {
+            dfsBoard(board,i,0);
+            dfsBoard(board,i,n-1);
+        }//初始化边界未被包围的0为# 剩余的0则为 需要改写的
+        for (int i = 1; i < m-1; i++)
+        {
+            for(int j = 1; j < n-1; j++){
+                if (board[i][j]=='O')
+                {
+                    board[i][j] = 'X';
+                }
+                
+            }
+        }
+
+        for (int i = 0; i < m; i++)
+        {
+            for(int j = 0; j < n; j++){
+                if (board[i][j]=='#')
+                {
+                    board[i][j] = 'O';
+                }
+                
+            }
+        }
+         
+
+    }
+    void dfsBoard(vector<vector<char>>& board,int i,int j){//从board[i][j]开始搜 将所有搜索范围内的0替换成#
+        if(i<0||i>(m-1)||j<0||j>(n-1)){return;}
+        if(board[i][j]!='O'){return;}
+        board[i][j] = '#';
+
+        dfsBoard(board,i+1,j);
+        dfsBoard(board,i,j+1);
+        dfsBoard(board,i-1,j);
+        dfsBoard(board,i,j-1);
+
+        
+    }
+};
+
+//并查集解法
+#include <iostream>
+#include <queue>
+#include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <vector>
+#include <unordered_map>
+#include <cmath>
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <list>
+#include <stack>
+using namespace std;
+
+class UnionFind
+{
+public:
+    int count;
+    int *parent;
+    //该题如果计算size会溢出long long 
+    //size对本题的时间复杂度影响不大 所以不进行平衡优化
+    UnionFind(int n)
+    {
+        count = n;
+        parent = new int[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            parent[i] = i;
+        }
+    }
+
+    void Union(int p, int q)
+    {
+        if (find(p) != find(q))
+        {
+            parent[find(p)] = find(q);
+
+            count--;
+        }
+    }
+
+    bool Connected(int p, int q)
+    {
+        return find(p) == find(q);
+    }
+
+    int find(int x)
+    {
+        while (x != parent[x])
+        {
+            parent[x] = parent[parent[x]]; //路径压缩
+            x = parent[x];
+        }
+        return x;
+    }
+
+    int countUnion()
+    {
+        return count;
+    }
+};
+
+class Solution
+{ //并查集
+public:
+    void solve(vector<vector<char>> &board)
+    { //二维数组 i,j -> 一维数组 n*i+j
+        int m = board.size();
+        int n = board[0].size();
+        int clusters = m * n;
+
+        UnionFind u(m * n + 1);
+
+        for (int i = 0; i < m; i++)
+        {
+            if (board[i][0] == 'O')
+            {
+                u.Union(clusters, n * i);
+            }
+            if (board[i][n - 1] == 'O')
+            {
+                u.Union(clusters, i * n + n - 1);
+            }
+        }
+        for (int i = 0; i < n; i++)
+        {
+            if (board[0][i] == 'O')
+            {
+                u.Union(clusters, i);
+            }
+            if (board[m - 1][i] == 'O')
+            {
+                u.Union(clusters, i + n * (m - 1));
+            }
+        }
+        int dr[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        for (int i = 1; i < m - 1; i++)
+        {
+            for (int j = 1; j < n - 1; j++)
+            {
+                if (board[i][j] == 'O')
+                {
+                    for (int k = 0; k < 4; k++)
+                    {
+                        int x = (i + dr[k][0]) * n + j + dr[k][1];
+                        if (board[i + dr[k][0]][j + dr[k][1]] == 'O')
+                        {
+                            u.Union(x, i * n + j);
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 1; i < m - 1; i++)
+        {
+            for (int j = 1; j < n - 1; j++)
+            {
+                if (!u.Connected(i * n + j, clusters))
+                {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+};
+
+int main()
+{
+}
+
